@@ -1,0 +1,40 @@
+/* CSS for burger menu */
+.burger_menu {
+  position: absolute;
+  top: 50px; /* Adjust as needed */
+  right: 20px; /* Adjust as needed */
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  display: none;
+}
+
+.menu.visible {
+  display: block;
+}
+
+.menu.hidden {
+  display: none;
+}
+
+.burger_bar {
+  width: 30px;
+  height: 3px;
+  background-color: #333;
+  margin: 6px 0;
+  transition: 0.4s;
+}
+
+.clicked .burger_bar:nth-child(1) {
+  transform: rotate(-45deg) translate(-5px, 5px);
+}
+
+.clicked .burger_bar:nth-child(2) {
+  opacity: 0;
+}
+
+.clicked .burger_bar:nth-child(3) {
+  transform: rotate(45deg) translate(-5px, -5px);
+}
