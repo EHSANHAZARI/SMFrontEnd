@@ -44,21 +44,6 @@ const Navbar = () => {
   // splitting method to get the name of the path in array
   const splitLocation = pathname.split("/");
 
-  // The change burger class
-  const [burger_class, setBurgerClass] = useState("burger-bar unclicked"); // As defult we are giving the burger-bar unclicked class to the state
-  const [menu_class, setMenuClass] = useState("menu hidden"); // as default we are giving the hidden class to the menu bar
-  const [isMenuClicked, setMenuClicked] = useState(false);
-
-  // Toggle burger menu change
-  const updateMenu = () => {
-    if (!isMenuClicked) {
-      setBurgerClass("burger_bar clicked");
-      setMenuClass("menu visible");
-    } else {
-      setBurgerClass("burger-bar unclicked");
-      setMenuClass("menu hidden");
-    }
-  };
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
@@ -85,15 +70,12 @@ const Navbar = () => {
             <Link to="/" className="nav-item nav-link active">
               Home
             </Link>
-            <div className="nav-item dropdown">
-              <Link
-                to="/About-Us"
-                className="nav-link dropdown-toggle"
-                data-bs-toggle=""
-              >
-                About Us
+            <div className="nav-item dropdown aboutus">
+              <Link to="/About-Us" className="nav-link " data-bs-toggle="">
+                <span>About Us</span>
+                <span className="chevron-dropdown"></span>
               </Link>
-              <div className="dropdown-menu rounded-0 m-0">
+              <div className="dropdown-menu rounded-0 m-0 " id="a">
                 <Link to="/About-Us/Our-Mission" className="dropdown-item">
                   Our Mission
                 </Link>
@@ -172,30 +154,129 @@ const Navbar = () => {
                   >
                     <Link
                       to="/Admin/Dashboard"
-                      className="nav-link dropdown-toggle"
+                      className="nav-link"
                       data-bs-toggle=""
                     >
-                      <img
-                        src={auth?.user?.photo}
-                        alt={auth?.user?.firstname}
-                        style={{
-                          width: "70px",
-                          height: "70px",
-                          borderRadius: "50%",
-                        }}
-                      />
+                      <div>
+                        <span className="chevron-dropdown-img"></span>
+                        <img
+                          src={auth?.user?.photo}
+                          alt={auth?.user?.firstname}
+                          style={{
+                            width: "70px",
+                            height: "70px",
+                            borderRadius: "50%",
+                          }}
+                        />
+                      </div>
                     </Link>
-                    <div className="dropdown-menu rounded-0 m-0">
-                      <Link to="/Admin/Dashboard" className="dropdown-item">
-                        Profile2
-                      </Link>
-                      <Link
-                        to="/Login"
-                        className="dropdown-item"
-                        onClick={handleLogout}
-                      >
-                        Logout
-                      </Link>
+                    <div className="dropdown-menu rounded-0 m-l " id="a">
+                      <li>
+                        <Link className="dropdown-item" to="/Admin/Dashboard">
+                          Account
+                        </Link>
+                      </li>
+                      <li>
+                        <Link className="dropdown-item" to="/Admin/Dashboard">
+                          Dashboard
+                        </Link>
+                      </li>
+                      <li>
+                        <hr className="dropdown-divider" />
+                      </li>
+                      <li>
+                        <Link
+                          className="dropdown-item"
+                          to="/Admin/Jobs/Manage-Jobs"
+                        >
+                          Manage Job
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="dropdown-item"
+                          to="/Admin/Jobs/Post-Job"
+                        >
+                          Post Job
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="dropdown-item"
+                          to="/Admin/Jobs/Applied-Jobs"
+                        >
+                          Applied Jobs
+                        </Link>
+                      </li>
+                      <li>
+                        <hr className="dropdown-divider" />
+                      </li>
+                      <li>
+                        <Link
+                          className="dropdown-item"
+                          to="/Admin/Countries/Manage-Countries"
+                        >
+                          Manage Countries
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="dropdown-item"
+                          to="/Admin/Countries/Add-Country"
+                        >
+                          Add Country
+                        </Link>
+                      </li>
+                      <li>
+                        <hr className="dropdown-divider" />
+                      </li>
+                      <li>
+                        <Link
+                          className="dropdown-item"
+                          to="/Admin/Sectors/Manage-Sectors"
+                        >
+                          Manage Sectors
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="dropdown-item"
+                          to="/Admin/Sectors/Add-Sector"
+                        >
+                          Add Sector
+                        </Link>
+                      </li>
+                      <li>
+                        <hr className="dropdown-divider" />
+                      </li>
+                      <li>
+                        <Link
+                          className="dropdown-item"
+                          to="/Admin/WorkAuthorizations/Manage-Work-Authorizations"
+                        >
+                          Manage Work Authorizations
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="dropdown-item"
+                          to="/Admin/WorkAuthorizations/Add-Work-Authorization"
+                        >
+                          Add Work Authorization
+                        </Link>
+                      </li>
+                      <li>
+                        <hr className="dropdown-divider" />
+                      </li>
+                      <li>
+                        <Link
+                          className="dropdown-item"
+                          to="/Login"
+                          onClick={handleLogout}
+                        >
+                          Logout
+                        </Link>
+                      </li>
                     </div>
                   </div>
                 </>
@@ -262,11 +343,7 @@ const Navbar = () => {
                       />
                     </Link>
                     <div className="dropdown-menu rounded-0 m-0">
-                      <Link
-                        to="/Applicant/Dashboard"
-                        className="dropdown-item"
-                        onClick={updateMenu}
-                      >
+                      <Link to="/Applicant/Dashboard" className="dropdown-item">
                         Profile2
                       </Link>
                       <Link

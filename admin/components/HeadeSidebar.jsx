@@ -1,471 +1,1002 @@
 import React, { Component, useRef, useEffect, useState } from "react";
-import {  NavLink, Link, useNavigate, useLocation } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { useAuth } from "../../Context/AuthContext";
 
 import PopperScript from "../scripts/popper";
 import BootstrapScript from "../scripts/bootstrap";
 import AppScript from "../scripts/maindashboard";
 
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import '../../assets/admin/css/portal.css';
-
-
+import "../../assets/admin/css/portal.css";
 
 const HeaderSidebar = () => {
+  const [auth, setAuth] = useAuth();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    const [auth, setAuth] = useAuth();
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const location = useLocation();
+  const notifyErr = (msg) =>
+    toast.error(msg, {
+      position: "top-center",
+      autoClose: 20000,
+      closeOnClick: true,
+      pauseOnHover: true,
+      theme: "light",
+    });
+  const notifySucc = (msg) =>
+    toast.success(msg, {
+      position: "top-center",
+      autoClose: 20000,
+      closeOnClick: true,
+      pauseOnHover: true,
+      theme: "light",
+    });
 
-    const notifyErr = (msg) => toast.error(msg, 
-        {position: "top-center", autoClose: 20000, closeOnClick: true, pauseOnHover: true, theme: "light",});
-    const notifySucc = (msg) => toast.success(msg, 
-        {position: "top-center", autoClose: 20000, closeOnClick: true, pauseOnHover: true, theme: "light",});
+  const handleLogout = () => {
+    setAuth({ ...auth, user: null, token: "" });
+    localStorage.removeItem("userAuthDetails");
+    notifySucc("You have Logged Out Successfully!!!");
+    navigate(location.state || "/Login");
+  };
 
-    const handleLogout = () => {
+  return (
+    <>
+      <PopperScript />
+      <BootstrapScript />
+      <AppScript />
+      <header className="app-header fixed-top">
+        <div className="app-header-inner">
+          <div className="container-fluid py-2">
+            <div className="app-header-content">
+              <div className="row justify-content-between align-items-center">
+                <div className="col-auto">
+                  <a
+                    id="sidepanel-toggler"
+                    className="sidepanel-toggler d-inline-block d-xl-none"
+                    href="#"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="30"
+                      height="30"
+                      viewBox="0 0 30 30"
+                      role="img"
+                    >
+                      <title>Menu</title>
 
-        setAuth({ ...auth, user: null, token: "" });
-        localStorage.removeItem("userAuthDetails");
-        notifySucc("You have Logged Out Successfully!!!");
-        navigate(location.state || "/Login");
-
-    };
-
-    return (
-        <>
-        <PopperScript />
-        <BootstrapScript />
-        <AppScript />
-            <header className="app-header fixed-top">	   	            
-                <div className="app-header-inner">  
-                    <div className="container-fluid py-2">
-                        <div className="app-header-content"> 
-                            <div className="row justify-content-between align-items-center">
-                                <div className="col-auto">
-                                    <a id="sidepanel-toggler" className="sidepanel-toggler d-inline-block d-xl-none" href="#">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" role="img">
-                                            <title>Menu</title>
-                                            
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path>
-                                        </svg>
-                                    </a>
-                                </div>
-
-                                <div className="search-mobile-trigger d-sm-none col">
-                                    <i className="search-mobile-trigger-icon fa-solid fa-magnifying-glass"></i>
-                                </div>
-
-                                <div className="app-search-box col">
-                                    <form className="app-search-form">   
-                                        <input type="text" placeholder="Search..." name="search" className="form-control search-input" />
-                                        <button type="submit" className="btn search-btn btn-primary" value="Search"><i className="fa-solid fa-magnifying-glass"></i></button> 
-                                    </form>
-                                </div>
-                                
-                                <div className="app-utilities col-auto">
-                                    <div className="app-utility-item app-user-dropdown dropdown">
-                                        {!auth.user?.role === 1 ? (<></>) : 
-                                        (
-                                            <>
-                                                <a className="dropdown-toggle" id="user-dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
-                                                    <img src={auth?.user?.photo} alt={auth?.user?.firstname} style={{ width: "40px", height: "40px", borderRadius: "50%"}} />
-                                                </a>
-                                                <ul class="dropdown-menu" aria-labelledby="user-dropdown-toggle">
-                                                    <li>
-                                                        <Link className="dropdown-item" to="/Admin/Dashboard">
-                                                            Account
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link className="dropdown-item" to="/Admin/Dashboard">
-                                                            Dashboard
-                                                        </Link>
-                                                    </li>
-                                                    <li><hr className="dropdown-divider" /></li>
-                                                    <li>
-                                                        <Link className="dropdown-item" to="/Admin/Jobs/Manage-Jobs">
-                                                            Manage Job
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link className="dropdown-item" to="/Admin/Jobs/Post-Job">
-                                                            Post Job
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link className="dropdown-item" to="/Admin/Jobs/Applied-Jobs">
-                                                            Applied Jobs
-                                                        </Link>
-                                                    </li>
-                                                    <li><hr className="dropdown-divider" /></li>
-                                                    <li>
-                                                        <Link className="dropdown-item" to="/Admin/Countries/Manage-Countries">
-                                                            Manage Countries
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link className="dropdown-item" to="/Admin/Countries/Add-Country">
-                                                            Add Country
-                                                        </Link>
-                                                    </li>
-                                                    <li><hr className="dropdown-divider" /></li>
-                                                    <li>
-                                                        <Link className="dropdown-item" to="/Admin/Sectors/Manage-Sectors">
-                                                            Manage Sectors
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link className="dropdown-item" to="/Admin/Sectors/Add-Sector">
-                                                            Add Sector
-                                                        </Link>
-                                                    </li>
-                                                    <li><hr className="dropdown-divider" /></li>
-                                                    <li>
-                                                        <Link className="dropdown-item" to="/Admin/WorkAuthorizations/Manage-Work-Authorizations">
-                                                            Manage Work Authorizations
-                                                        </Link>
-                                                    </li>
-                                                    <li>
-                                                        <Link className="dropdown-item" to="/Admin/WorkAuthorizations/Add-Work-Authorization">
-                                                            Add Work Authorization
-                                                        </Link>
-                                                    </li>
-                                                    <li><hr className="dropdown-divider" /></li>
-                                                    <li>
-                                                        <Link className="dropdown-item" to="/Login" onClick={handleLogout}>
-                                                            Logout
-                                                        </Link>
-                                                    </li>
-                                                </ul>
-                                            </>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-miterlimit="10"
+                        stroke-width="2"
+                        d="M4 7h22M4 15h22M4 23h22"
+                      ></path>
+                    </svg>
+                  </a>
                 </div>
-                <div id="app-sidepanel" className="app-sidepanel"> 
-                    <div id="sidepanel-drop" className="sidepanel-drop"></div>
-                    <div className="sidepanel-inner d-flex flex-column">
-                        <a href="#" id="sidepanel-close" className="sidepanel-close d-xl-none">&times;</a>
-                        <div className="app-branding">
-                            <Link className="app-logo" to="/">
-                                <img className="logo-icon me-2" src="../../assets/admin/images/admin.png" alt="Admin Logo" />
-                                <span className="logo-text">
-                                    Admin
-                                </span>
+
+                <div className="search-mobile-trigger d-sm-none col">
+                  <i className="search-mobile-trigger-icon fa-solid fa-magnifying-glass"></i>
+                </div>
+
+                <div className="app-search-box col">
+                  <form className="app-search-form">
+                    <input
+                      type="text"
+                      placeholder="Search..."
+                      name="search"
+                      className="form-control search-input"
+                    />
+                    <button
+                      type="submit"
+                      className="btn search-btn btn-primary"
+                      value="Search"
+                    >
+                      <i className="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                  </form>
+                </div>
+
+                <div className="app-utilities col-auto">
+                  <div className="app-utility-item app-user-dropdown dropdown">
+                    {!auth.user?.role === 1 ? (
+                      <></>
+                    ) : (
+                      <>
+                        <a
+                          className="dropdown-toggle"
+                          id="user-dropdown-toggle"
+                          data-bs-toggle="dropdown"
+                          href="#"
+                          role="button"
+                          aria-expanded="false"
+                        >
+                          <img
+                            src={auth?.user?.photo}
+                            alt={auth?.user?.firstname}
+                            style={{
+                              width: "40px",
+                              height: "40px",
+                              borderRadius: "50%",
+                            }}
+                          />
+                        </a>
+                        <ul
+                          class="dropdown-menu"
+                          aria-labelledby="user-dropdown-toggle"
+                        >
+                          <li>
+                            <Link
+                              className="dropdown-item"
+                              to="/Admin/Dashboard"
+                            >
+                              Account
                             </Link>
-            
-                        </div>
-                        
-                        <nav id="app-nav-main" class="app-nav app-nav-main flex-grow-1">
-                            <ul class="app-menu list-unstyled accordion" id="menu-accordion">
-                                <li class="nav-item">
-                                    
-                                    <Link class="nav-link active" to="/Admin/Dashboard" onClick={() => { window.location.href = "/Admin/Dashboard" }}>
-                                        <span class="nav-icon">
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-house-door" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M7.646 1.146a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 .146.354v7a.5.5 0 0 1-.5.5H9.5a.5.5 0 0 1-.5-.5v-4H7v4a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .146-.354l6-6zM2.5 7.707V14H6v-4a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4h3.5V7.707L8 2.207l-5.5 5.5z"/>
-                                            <path fill-rule="evenodd" d="M13 2.5V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
-                                            </svg>
-                                        </span>
-                                        <span class="nav-link-text">Dashboard</span>
-                                    </Link>
-                                </li>
-                                <li class="nav-item has-submenu">
-                                    <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#submenu-1" aria-expanded="false" aria-controls="submenu-1">
-                                        <span class="nav-icon">
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-files" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M4 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4z"/>
-                                            <path d="M6 0h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2v-1a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1H4a2 2 0 0 1 2-2z"/>
-                                            </svg>
-                                        </span>
-                                        <span class="nav-link-text">Admin Jobs</span>
-                                        <span class="submenu-arrow">
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                    <div id="submenu-1" class="collapse submenu submenu-1" data-bs-parent="#menu-accordion">
-                                        <ul class="submenu-list list-unstyled">
-                                            <li class="submenu-item">
-                                                <Link class="submenu-link" to="/Admin/Jobs/Manage-Jobs" onClick={() => { window.location.href = "/Admin/Jobs/Manage-Jobs" }}>
-                                                    Manage Jobs
-                                                </Link>
-                                            </li>
-                                            <li class="submenu-item">
-                                                <Link class="submenu-link" to="/Admin/Jobs/Post-Job" onClick={() => { window.location.href = "/Admin/Jobs/Post-Job" }}>
-                                                    Post New Job
-                                                </Link>
-                                            </li>
-                                            <li class="submenu-item">
-                                                <Link class="submenu-link" to="/Admin/Jobs/Applied-Jobs" onClick={() => { window.location.href = "/Admin/Jobs/Applied-Jobs" }}>
-                                                    Applied Jobs
-                                                </Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                {/*Job Qualification Starts ========================== */}
-                                <li class="nav-item has-submenu">
-                                    <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#submenu-q" aria-expanded="false" aria-controls="submenu-q">
-                                        <span class="nav-icon">
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-columns-gap" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"/>
-                                            </svg>
-                                        </span>
-                                        <span class="nav-link-text">Job Qualifications</span>
-                                        <span class="submenu-arrow">
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                    <div id="submenu-q" class="collapse submenu submenu-q" data-bs-parent="#menu-accordion">
-                                        <ul class="submenu-list list-unstyled">
-                                            <li class="submenu-item">
-                                                <Link class="submenu-link" to="/Admin/Qualifications/Manage-Qualifications" onClick={() => { window.location.href = "/Admin/Qualifications/Manage-Qualifications" }}>
-                                                    Manage Qualifications
-                                                </Link>
-                                            </li>
-                                            <li class="submenu-item">
-                                                <Link class="submenu-link" to="/Admin/Qualifications/Add-Qualification" onClick={() => { window.location.href = "/Admin/Qualifications/Add-Qualification" }}>
-                                                    Add New Qualification
-                                                </Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                 {/* Job Qualification Ends =========================== */}
+                          </li>
+                          <li>
+                            <Link
+                              className="dropdown-item"
+                              to="/Admin/Dashboard"
+                            >
+                              Dashboard
+                            </Link>
+                          </li>
+                          <li>
+                            <hr className="dropdown-divider" />
+                          </li>
+                          <li>
+                            <Link
+                              className="dropdown-item"
+                              to="/Admin/Jobs/Manage-Jobs"
+                            >
+                              Manage Job
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              className="dropdown-item"
+                              to="/Admin/Jobs/Post-Job"
+                            >
+                              Post Job
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              className="dropdown-item"
+                              to="/Admin/Jobs/Applied-Jobs"
+                            >
+                              Applied Jobs
+                            </Link>
+                          </li>
+                          <li>
+                            <hr className="dropdown-divider" />
+                          </li>
+                          <li>
+                            <Link
+                              className="dropdown-item"
+                              to="/Admin/Countries/Manage-Countries"
+                            >
+                              Manage Countries
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              className="dropdown-item"
+                              to="/Admin/Countries/Add-Country"
+                            >
+                              Add Country
+                            </Link>
+                          </li>
+                          <li>
+                            <hr className="dropdown-divider" />
+                          </li>
+                          <li>
+                            <Link
+                              className="dropdown-item"
+                              to="/Admin/Sectors/Manage-Sectors"
+                            >
+                              Manage Sectors
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              className="dropdown-item"
+                              to="/Admin/Sectors/Add-Sector"
+                            >
+                              Add Sector
+                            </Link>
+                          </li>
+                          <li>
+                            <hr className="dropdown-divider" />
+                          </li>
+                          <li>
+                            <Link
+                              className="dropdown-item"
+                              to="/Admin/WorkAuthorizations/Manage-Work-Authorizations"
+                            >
+                              Manage Work Authorizations
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              className="dropdown-item"
+                              to="/Admin/WorkAuthorizations/Add-Work-Authorization"
+                            >
+                              Add Work Authorization
+                            </Link>
+                          </li>
+                          <li>
+                            <hr className="dropdown-divider" />
+                          </li>
+                          <li>
+                            <Link
+                              className="dropdown-item"
+                              to="/Login"
+                              onClick={handleLogout}
+                            >
+                              Logout
+                            </Link>
+                          </li>
+                        </ul>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="app-sidepanel" className="app-sidepanel">
+          <div id="sidepanel-drop" className="sidepanel-drop"></div>
+          <div className="sidepanel-inner d-flex flex-column">
+            <a
+              href="#"
+              id="sidepanel-close"
+              className="sidepanel-close d-xl-none"
+            >
+              &times;
+            </a>
+            <div className="app-branding">
+              <Link className="app-logo" to="/">
+                <img
+                  className="logo-icon me-2"
+                  src="../../assets/admin/images/admin.png"
+                  alt="Admin Logo"
+                />
+                <span className="logo-text">Admin</span>
+              </Link>
+            </div>
 
-                                 {/*Work Experience Starts ========================== */}
-                                <li class="nav-item has-submenu">
-                                    <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#submenu-we" aria-expanded="false" aria-controls="submenu-we">
-                                        <span class="nav-icon">
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-columns-gap" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"/>
-                                            </svg>
-                                        </span>
-                                        <span class="nav-link-text">Work Experiences</span>
-                                        <span class="submenu-arrow">
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                    <div id="submenu-we" class="collapse submenu submenu-we" data-bs-parent="#menu-accordion">
-                                        <ul class="submenu-list list-unstyled">
-                                            <li class="submenu-item">
-                                                <Link class="submenu-link" to="/Admin/WorkExperiences/Manage-Work-Experiences" onClick={() => { window.location.href = "/Admin/WorkExperiences/Manage-Work-Experiences" }}>
-                                                    Manage Work Experiences
-                                                </Link>
-                                            </li>
-                                            <li class="submenu-item">
-                                                <Link class="submenu-link" to="/Admin/WorkExperiences/Add-Work-Experience" onClick={() => { window.location.href = "/Admin/WorkExperiences/Add-Work-Experience" }}>
-                                                    Add Work Experience
-                                                </Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                 {/* Work Experience Ends =========================== */}
+            <nav id="app-nav-main" class="app-nav app-nav-main flex-grow-1">
+              <ul class="app-menu list-unstyled accordion" id="menu-accordion">
+                <li class="nav-item">
+                  <Link
+                    class="nav-link active"
+                    to="/Admin/Dashboard"
+                    onClick={() => {
+                      window.location.href = "/Admin/Dashboard";
+                    }}
+                  >
+                    <span class="nav-icon">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-house-door"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M7.646 1.146a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 .146.354v7a.5.5 0 0 1-.5.5H9.5a.5.5 0 0 1-.5-.5v-4H7v4a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .146-.354l6-6zM2.5 7.707V14H6v-4a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4h3.5V7.707L8 2.207l-5.5 5.5z"
+                        />
+                        <path
+                          fill-rule="evenodd"
+                          d="M13 2.5V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"
+                        />
+                      </svg>
+                    </span>
+                    <span class="nav-link-text">Dashboard</span>
+                  </Link>
+                </li>
+                <li class="nav-item has-submenu">
+                  <a
+                    class="nav-link submenu-toggle"
+                    href="#"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#submenu-1"
+                    aria-expanded="false"
+                    aria-controls="submenu-1"
+                  >
+                    <span class="nav-icon">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-files"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M4 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4z"
+                        />
+                        <path d="M6 0h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2v-1a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1H4a2 2 0 0 1 2-2z" />
+                      </svg>
+                    </span>
+                    <span class="nav-link-text">Admin Jobs</span>
+                    <span class="submenu-arrow">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-chevron-down"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                        />
+                      </svg>
+                    </span>
+                  </a>
+                  <div
+                    id="submenu-1"
+                    class="collapse submenu submenu-1"
+                    data-bs-parent="#menu-accordion"
+                  >
+                    <ul class="submenu-list list-unstyled">
+                      <li class="submenu-item">
+                        <Link
+                          class="submenu-link"
+                          to="/Admin/Jobs/Manage-Jobs"
+                          onClick={() => {
+                            window.location.href = "/Admin/Jobs/Manage-Jobs";
+                          }}
+                        >
+                          Manage Jobs
+                        </Link>
+                      </li>
+                      <li class="submenu-item">
+                        <Link
+                          class="submenu-link"
+                          to="/Admin/Jobs/Post-Job"
+                          onClick={() => {
+                            window.location.href = "/Admin/Jobs/Post-Job";
+                          }}
+                        >
+                          Post New Job
+                        </Link>
+                      </li>
+                      <li class="submenu-item">
+                        <Link
+                          class="submenu-link"
+                          to="/Admin/Jobs/Applied-Jobs"
+                          onClick={() => {
+                            window.location.href = "/Admin/Jobs/Applied-Jobs";
+                          }}
+                        >
+                          Applied Jobs
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                {/*Job Qualification Starts ========================== */}
+                <li class="nav-item has-submenu">
+                  <a
+                    class="nav-link submenu-toggle"
+                    href="#"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#submenu-q"
+                    aria-expanded="false"
+                    aria-controls="submenu-q"
+                  >
+                    <span class="nav-icon">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-columns-gap"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"
+                        />
+                      </svg>
+                    </span>
+                    <span class="nav-link-text">Job Qualifications</span>
+                    <span class="submenu-arrow">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-chevron-down"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                        />
+                      </svg>
+                    </span>
+                  </a>
+                  <div
+                    id="submenu-q"
+                    class="collapse submenu submenu-q"
+                    data-bs-parent="#menu-accordion"
+                  >
+                    <ul class="submenu-list list-unstyled">
+                      <li class="submenu-item">
+                        <Link
+                          class="submenu-link"
+                          to="/Admin/Qualifications/Manage-Qualifications"
+                          onClick={() => {
+                            window.location.href =
+                              "/Admin/Qualifications/Manage-Qualifications";
+                          }}
+                        >
+                          Manage Qualifications
+                        </Link>
+                      </li>
+                      <li class="submenu-item">
+                        <Link
+                          class="submenu-link"
+                          to="/Admin/Qualifications/Add-Qualification"
+                          onClick={() => {
+                            window.location.href =
+                              "/Admin/Qualifications/Add-Qualification";
+                          }}
+                        >
+                          Add New Qualification
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                {/* Job Qualification Ends =========================== */}
 
-                                 {/*Work Mode Starts ========================== */}
-                                <li class="nav-item has-submenu">
-                                    <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#submenu-wm" aria-expanded="false" aria-controls="submenu-wm">
-                                        <span class="nav-icon">
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-columns-gap" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"/>
-                                            </svg>
-                                        </span>
-                                        <span class="nav-link-text">Work Modes</span>
-                                        <span class="submenu-arrow">
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                    <div id="submenu-wm" class="collapse submenu submenu-wm" data-bs-parent="#menu-accordion">
-                                        <ul class="submenu-list list-unstyled">
-                                            <li class="submenu-item">
-                                                <Link class="submenu-link" to="/Admin/WorkModes/Manage-Work-Modes" onClick={() => { window.location.href = "/Admin/WorkModes/Manage-Work-Modes" }}>
-                                                    Manage Work Modes
-                                                </Link>
-                                            </li>
-                                            <li class="submenu-item">
-                                                <Link class="submenu-link" to="/Admin/WorkModes/Add-Work-Mode" onClick={() => { window.location.href = "/Admin/WorkModes/Add-Work-Mode" }}>
-                                                    Add Work Mode
-                                                </Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                 {/* Work Mode Ends =========================== */}
+                {/*Work Experience Starts ========================== */}
+                <li class="nav-item has-submenu">
+                  <a
+                    class="nav-link submenu-toggle"
+                    href="#"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#submenu-we"
+                    aria-expanded="false"
+                    aria-controls="submenu-we"
+                  >
+                    <span class="nav-icon">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-columns-gap"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"
+                        />
+                      </svg>
+                    </span>
+                    <span class="nav-link-text">Work Experiences</span>
+                    <span class="submenu-arrow">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-chevron-down"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                        />
+                      </svg>
+                    </span>
+                  </a>
+                  <div
+                    id="submenu-we"
+                    class="collapse submenu submenu-we"
+                    data-bs-parent="#menu-accordion"
+                  >
+                    <ul class="submenu-list list-unstyled">
+                      <li class="submenu-item">
+                        <Link
+                          class="submenu-link"
+                          to="/Admin/WorkExperiences/Manage-Work-Experiences"
+                          onClick={() => {
+                            window.location.href =
+                              "/Admin/WorkExperiences/Manage-Work-Experiences";
+                          }}
+                        >
+                          Manage Work Experiences
+                        </Link>
+                      </li>
+                      <li class="submenu-item">
+                        <Link
+                          class="submenu-link"
+                          to="/Admin/WorkExperiences/Add-Work-Experience"
+                          onClick={() => {
+                            window.location.href =
+                              "/Admin/WorkExperiences/Add-Work-Experience";
+                          }}
+                        >
+                          Add Work Experience
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                {/* Work Experience Ends =========================== */}
 
+                {/*Work Mode Starts ========================== */}
+                <li class="nav-item has-submenu">
+                  <a
+                    class="nav-link submenu-toggle"
+                    href="#"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#submenu-wm"
+                    aria-expanded="false"
+                    aria-controls="submenu-wm"
+                  >
+                    <span class="nav-icon">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-columns-gap"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"
+                        />
+                      </svg>
+                    </span>
+                    <span class="nav-link-text">Work Modes</span>
+                    <span class="submenu-arrow">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-chevron-down"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                        />
+                      </svg>
+                    </span>
+                  </a>
+                  <div
+                    id="submenu-wm"
+                    class="collapse submenu submenu-wm"
+                    data-bs-parent="#menu-accordion"
+                  >
+                    <ul class="submenu-list list-unstyled">
+                      <li class="submenu-item">
+                        <Link
+                          class="submenu-link"
+                          to="/Admin/WorkModes/Manage-Work-Modes"
+                          onClick={() => {
+                            window.location.href =
+                              "/Admin/WorkModes/Manage-Work-Modes";
+                          }}
+                        >
+                          Manage Work Modes
+                        </Link>
+                      </li>
+                      <li class="submenu-item">
+                        <Link
+                          class="submenu-link"
+                          to="/Admin/WorkModes/Add-Work-Mode"
+                          onClick={() => {
+                            window.location.href =
+                              "/Admin/WorkModes/Add-Work-Mode";
+                          }}
+                        >
+                          Add Work Mode
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                {/* Work Mode Ends =========================== */}
 
-                                <li class="nav-item has-submenu">
-                                    <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#submenu-2" aria-expanded="false" aria-controls="submenu-2">
-                                        <span class="nav-icon">
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-columns-gap" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"/>
-                                            </svg>
-                                        </span>
-                                        <span class="nav-link-text">Job Countries</span>
-                                        <span class="submenu-arrow">
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                    <div id="submenu-2" class="collapse submenu submenu-2" data-bs-parent="#menu-accordion">
-                                        <ul class="submenu-list list-unstyled">
-                                            <li class="submenu-item">
-                                                <Link class="submenu-link" to="/Admin/Countries/Manage-Countries" onClick={() => { window.location.href = "/Admin/Countries/Manage-Countries" }}>
-                                                    Manage Countries
-                                                </Link>
-                                            </li>
-                                            <li class="submenu-item">
-                                                <Link class="submenu-link" to="/Admin/Countries/Add-Country" onClick={() => { window.location.href = "/Admin/Countries/Add-Country" }}>
-                                                    Add New Country
-                                                </Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li> 
-                                 {/*Provinces Starts ========================== */}
-                                 <li class="nav-item has-submenu">
-                                    <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#submenu-prov" aria-expanded="false" aria-controls="submenu-prov">
-                                        <span class="nav-icon">
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-columns-gap" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"/>
-                                            </svg>
-                                        </span>
-                                        <span class="nav-link-text">Job Provinces</span>
-                                        <span class="submenu-arrow">
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                    <div id="submenu-prov" class="collapse submenu submenu-prov" data-bs-parent="#menu-accordion">
-                                        <ul class="submenu-list list-unstyled">
-                                            <li class="submenu-item">
-                                                <Link class="submenu-link" to="/Admin/Provinces/Manage-Provinces" onClick={() => { window.location.href = "/Admin/Provinces/Manage-Provinces" }}>
-                                                    Manage Provinces
-                                                </Link>
-                                            </li>
-                                            <li class="submenu-item">
-                                                <Link class="submenu-link" to="/Admin/Provinces/Add-Province" onClick={() => { window.location.href = "/Admin/Provinces/Add-Province" }}>
-                                                    Add New Province
-                                                </Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                 {/* Provinces Ends =========================== */}
+                <li class="nav-item has-submenu">
+                  <a
+                    class="nav-link submenu-toggle"
+                    href="#"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#submenu-2"
+                    aria-expanded="false"
+                    aria-controls="submenu-2"
+                  >
+                    <span class="nav-icon">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-columns-gap"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"
+                        />
+                      </svg>
+                    </span>
+                    <span class="nav-link-text">Job Countries</span>
+                    <span class="submenu-arrow">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-chevron-down"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                        />
+                      </svg>
+                    </span>
+                  </a>
+                  <div
+                    id="submenu-2"
+                    class="collapse submenu submenu-2"
+                    data-bs-parent="#menu-accordion"
+                  >
+                    <ul class="submenu-list list-unstyled">
+                      <li class="submenu-item">
+                        <Link
+                          class="submenu-link"
+                          to="/Admin/Countries/Manage-Countries"
+                          onClick={() => {
+                            window.location.href =
+                              "/Admin/Countries/Manage-Countries";
+                          }}
+                        >
+                          Manage Countries
+                        </Link>
+                      </li>
+                      <li class="submenu-item">
+                        <Link
+                          class="submenu-link"
+                          to="/Admin/Countries/Add-Country"
+                          onClick={() => {
+                            window.location.href =
+                              "/Admin/Countries/Add-Country";
+                          }}
+                        >
+                          Add New Country
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                {/*Provinces Starts ========================== */}
+                <li class="nav-item has-submenu">
+                  <a
+                    class="nav-link submenu-toggle"
+                    href="#"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#submenu-prov"
+                    aria-expanded="false"
+                    aria-controls="submenu-prov"
+                  >
+                    <span class="nav-icon">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-columns-gap"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"
+                        />
+                      </svg>
+                    </span>
+                    <span class="nav-link-text">Job Provinces</span>
+                    <span class="submenu-arrow">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-chevron-down"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                        />
+                      </svg>
+                    </span>
+                  </a>
+                  <div
+                    id="submenu-prov"
+                    class="collapse submenu submenu-prov"
+                    data-bs-parent="#menu-accordion"
+                  >
+                    <ul class="submenu-list list-unstyled">
+                      <li class="submenu-item">
+                        <Link
+                          class="submenu-link"
+                          to="/Admin/Provinces/Manage-Provinces"
+                          onClick={() => {
+                            window.location.href =
+                              "/Admin/Provinces/Manage-Provinces";
+                          }}
+                        >
+                          Manage Provinces
+                        </Link>
+                      </li>
+                      <li class="submenu-item">
+                        <Link
+                          class="submenu-link"
+                          to="/Admin/Provinces/Add-Province"
+                          onClick={() => {
+                            window.location.href =
+                              "/Admin/Provinces/Add-Province";
+                          }}
+                        >
+                          Add New Province
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                {/* Provinces Ends =========================== */}
 
-                                 {/*Cities Starts ========================== */}
-                                 <li class="nav-item has-submenu">
-                                    <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#submenu-city" aria-expanded="false" aria-controls="submenu-city">
-                                        <span class="nav-icon">
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-columns-gap" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"/>
-                                            </svg>
-                                        </span>
-                                        <span class="nav-link-text">Job Cities</span>
-                                        <span class="submenu-arrow">
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                    <div id="submenu-city" class="collapse submenu submenu-city" data-bs-parent="#menu-accordion">
-                                        <ul class="submenu-list list-unstyled">
-                                            <li class="submenu-item">
-                                                <Link class="submenu-link" to="/Admin/Cities/Manage-Cities" onClick={() => { window.location.href = "/Admin/Cities/Manage-Cities" }}>
-                                                    Manage Cities
-                                                </Link>
-                                            </li>
-                                            <li class="submenu-item">
-                                                <Link class="submenu-link" to="/Admin/Cities/Add-City" onClick={() => { window.location.href = "/Admin/Cities/Add-City" }}>
-                                                    Add New City
-                                                </Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                 {/* Cities Ends =========================== */}
+                {/*Cities Starts ========================== */}
+                <li class="nav-item has-submenu">
+                  <a
+                    class="nav-link submenu-toggle"
+                    href="#"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#submenu-city"
+                    aria-expanded="false"
+                    aria-controls="submenu-city"
+                  >
+                    <span class="nav-icon">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-columns-gap"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"
+                        />
+                      </svg>
+                    </span>
+                    <span class="nav-link-text">Job Cities</span>
+                    <span class="submenu-arrow">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-chevron-down"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                        />
+                      </svg>
+                    </span>
+                  </a>
+                  <div
+                    id="submenu-city"
+                    class="collapse submenu submenu-city"
+                    data-bs-parent="#menu-accordion"
+                  >
+                    <ul class="submenu-list list-unstyled">
+                      <li class="submenu-item">
+                        <Link
+                          class="submenu-link"
+                          to="/Admin/Cities/Manage-Cities"
+                          onClick={() => {
+                            window.location.href =
+                              "/Admin/Cities/Manage-Cities";
+                          }}
+                        >
+                          Manage Cities
+                        </Link>
+                      </li>
+                      <li class="submenu-item">
+                        <Link
+                          class="submenu-link"
+                          to="/Admin/Cities/Add-City"
+                          onClick={() => {
+                            window.location.href = "/Admin/Cities/Add-City";
+                          }}
+                        >
+                          Add New City
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                {/* Cities Ends =========================== */}
 
-                                <li class="nav-item has-submenu">
-                                    <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#submenu-sector" aria-expanded="false" aria-controls="submenu-sector">
-                                        <span class="nav-icon">
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-columns-gap" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"/>
-                                            </svg>
-                                        </span>
-                                        <span class="nav-link-text">Job Sectors</span>
-                                        <span class="submenu-arrow">
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                    <div id="submenu-sector" class="collapse submenu submenu-2" data-bs-parent="#menu-accordion">
-                                        <ul class="submenu-list list-unstyled">
-                                            <li class="submenu-item">
-                                                <Link class="submenu-link" to="/Admin/Sectors/Manage-Sectors" onClick={() => { window.location.href = "/Admin/Sectors/Manage-Sectors" }}>
-                                                    Manage Job Sectors
-                                                </Link>
-                                            </li>
-                                            <li class="submenu-item">
-                                                <Link class="submenu-link" to="/Admin/Sectors/Add-Sector" onClick={() => { window.location.href = "/Admin/Sectors/Add-Sector" }}>
-                                                    Add New Job Sector
-                                                </Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li> 
-                                <li class="nav-item has-submenu">
-                                    <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#submenu-4" aria-expanded="false" aria-controls="submenu-4">
-                                        <span class="nav-icon">
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-columns-gap" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"/>
-                                            </svg>
-                                        </span>
-                                        <span class="nav-link-text">Work Authorization Types</span>
-                                        <span class="submenu-arrow">
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                    <div id="submenu-4" class="collapse submenu submenu-4" data-bs-parent="#menu-accordion">
-                                        <ul class="submenu-list list-unstyled">
-                                            <li class="submenu-item">
-                                                <Link class="submenu-link" to="/Admin/WorkAuthorizations/Manage-Work-Authorizations" onClick={() => { window.location.href = "/Admin/WorkAuthorizations/Manage-Work-Authorizations" }}>
-                                                    Manage Work Authorization Types
-                                                </Link>
-                                            </li>
-                                            <li class="submenu-item">
-                                                <Link class="submenu-link" to="/Admin/WorkAuthorizations/Add-Work-Authorization-Type" onClick={() => { window.location.href = "/Admin/WorkAuthorizations/Add-Work-Authorization" }}>
-                                                    Add New Work Authorization
-                                                </Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>  		    
-                            </ul>
-                        </nav>
-                        <div class="app-sidepanel-footer">
-                            <nav class="app-nav app-nav-footer">
-                                <ul class="app-menu footer-menu list-unstyled">
-                                    {/* <li class="nav-item">
+                <li class="nav-item has-submenu">
+                  <a
+                    class="nav-link submenu-toggle"
+                    href="#"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#submenu-sector"
+                    aria-expanded="false"
+                    aria-controls="submenu-sector"
+                  >
+                    <span class="nav-icon">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-columns-gap"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"
+                        />
+                      </svg>
+                    </span>
+                    <span class="nav-link-text">Job Sectors</span>
+                    <span class="submenu-arrow">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-chevron-down"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                        />
+                      </svg>
+                    </span>
+                  </a>
+                  <div
+                    id="submenu-sector"
+                    class="collapse submenu submenu-2"
+                    data-bs-parent="#menu-accordion"
+                  >
+                    <ul class="submenu-list list-unstyled">
+                      <li class="submenu-item">
+                        <Link
+                          class="submenu-link"
+                          to="/Admin/Sectors/Manage-Sectors"
+                          onClick={() => {
+                            window.location.href =
+                              "/Admin/Sectors/Manage-Sectors";
+                          }}
+                        >
+                          Manage Job Sectors
+                        </Link>
+                      </li>
+                      <li class="submenu-item">
+                        <Link
+                          class="submenu-link"
+                          to="/Admin/Sectors/Add-Sector"
+                          onClick={() => {
+                            window.location.href = "/Admin/Sectors/Add-Sector";
+                          }}
+                        >
+                          Add New Job Sector
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                <li class="nav-item has-submenu">
+                  <a
+                    class="nav-link submenu-toggle"
+                    href="#"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#submenu-4"
+                    aria-expanded="false"
+                    aria-controls="submenu-4"
+                  >
+                    <span class="nav-icon">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-columns-gap"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"
+                        />
+                      </svg>
+                    </span>
+                    <span class="nav-link-text">Work Authorization Types</span>
+                    <span class="submenu-arrow">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-chevron-down"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                        />
+                      </svg>
+                    </span>
+                  </a>
+                  <div
+                    id="submenu-4"
+                    class="collapse submenu submenu-4"
+                    data-bs-parent="#menu-accordion"
+                  >
+                    <ul class="submenu-list list-unstyled">
+                      <li class="submenu-item">
+                        <Link
+                          class="submenu-link"
+                          to="/Admin/WorkAuthorizations/Manage-Work-Authorizations"
+                          onClick={() => {
+                            window.location.href =
+                              "/Admin/WorkAuthorizations/Manage-Work-Authorizations";
+                          }}
+                        >
+                          Manage Work Authorization Types
+                        </Link>
+                      </li>
+                      <li class="submenu-item">
+                        <Link
+                          class="submenu-link"
+                          to="/Admin/WorkAuthorizations/Add-Work-Authorization-Type"
+                          onClick={() => {
+                            window.location.href =
+                              "/Admin/WorkAuthorizations/Add-Work-Authorization";
+                          }}
+                        >
+                          Add New Work Authorization
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+            </nav>
+            <div class="app-sidepanel-footer">
+              <nav class="app-nav app-nav-footer">
+                <ul class="app-menu footer-menu list-unstyled">
+                  {/* <li class="nav-item">
                                         <a class="nav-link" href="settings.html">
                                             <span class="nav-icon">
                                                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gear" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -476,18 +1007,35 @@ const HeaderSidebar = () => {
                                             <span class="nav-link-text">Settings</span>
                                         </a>
                                     </li> */}
-                                    <li className="nav-item">
-                                        <Link className="nav-link" to="/Login" onClick={handleLogout}>
-                                            <span className="nav-icon">
-                                                <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-download" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                                                <path fill-rule="evenodd" d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-                                                </svg>
-                                            </span>
-                                            <span className="nav-link-text">Logout</span>
-                                        </Link>
-                                    </li>
-                                    {/* <li class="nav-item">
+                  <li className="nav-item">
+                    <Link
+                      className="nav-link"
+                      to="/Login"
+                      onClick={handleLogout}
+                    >
+                      <span className="nav-icon">
+                        <svg
+                          width="1em"
+                          height="1em"
+                          viewBox="0 0 16 16"
+                          className="bi bi-download"
+                          fill="currentColor"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"
+                          />
+                          <path
+                            fill-rule="evenodd"
+                            d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"
+                          />
+                        </svg>
+                      </span>
+                      <span className="nav-link-text">Logout</span>
+                    </Link>
+                  </li>
+                  {/* <li class="nav-item">
                                         <a class="nav-link" href="https://themes.3rdwavemedia.com/bootstrap-templates/admin-dashboard/portal-free-bootstrap-admin-dashboard-template-for-developers/">
                                             <span class="nav-icon">
                                                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-person" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -498,15 +1046,14 @@ const HeaderSidebar = () => {
                                             <span class="nav-link-text">License</span>
                                         </a>
                                     </li> */}
-                                </ul>
-                            </nav>
-                        </div>                    
-                    </div>
-                </div>
-            </header>
-        </>
-    );
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </header>
+    </>
+  );
 };
-
 
 export default HeaderSidebar;

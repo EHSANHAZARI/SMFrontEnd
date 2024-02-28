@@ -1,40 +1,131 @@
-/* CSS for burger menu */
-.burger_menu {
-  position: absolute;
-  top: 50px; /* Adjust as needed */
-  right: 20px; /* Adjust as needed */
-  background-color: #ffffff;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+.hidden {
   display: none;
 }
 
-.menu.visible {
+.visible {
+  display: inline;
+}
+
+.ham {
+  position: fixed;
+  z-index: 1;
+  background-color: #963cff;
+  color: white;
+  right: 240px;
+  height: 735px;
+  width: 250px;
+  display: none; /* Initially hide the .ham element */
   display: block;
+  top: 74px;
+}
+.ham li {
+  margin-bottom: 20px;
+  text-align: center;
 }
 
-.menu.hidden {
-  display: none;
+.ham li {
+  list-style-type: none;
 }
 
-.burger_bar {
-  width: 30px;
-  height: 3px;
-  background-color: #333;
-  margin: 6px 0;
-  transition: 0.4s;
+.aboutUs::after {
+  content: url(../../icons/menu.png); /* Set the content of the pseudo-element to the image */
+  width: 20px; /* Adjust the width as needed */
+  height: 20px; /* Adjust the height as needed */
+  margin-left: 5px; /* Adjust the margin as needed */
 }
 
-.clicked .burger_bar:nth-child(1) {
-  transform: rotate(-45deg) translate(-5px, 5px);
+.profile_style {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
 }
 
-.clicked .burger_bar:nth-child(2) {
+.Xicon {
+  width: 40px;
+  height: 40px;
+  margin-right: 15px;
+  border-radius: 50%;
+}
+
+#img::after {
+  content: ""; /* Ensure content is specified for pseudo-elements */
+  display: inline-block;
+  width: 20px; /* Adjust width as needed */
+  height: 20px; /* Adjust height as needed */
+  background-image: url("../../icons/Xicon.png"); /* Path to your dropdown icon */
+  background-size: cover; /* Adjust sizing as needed */
+  margin-left: 5px; /* Adjust spacing between image and icon as needed */
+  /* Add any other styling properties as needed */
+}
+
+ul .submenu {
+  position: absolute;
+  width: 200px;
+  background-color: #ffffff;
+  box-shadow: 0 20px 45px #00000020;
+  margin-top: -50px;
   opacity: 0;
+  z-index: -999;
+  transition: all ease 0.5s;
 }
 
-.clicked .burger_bar:nth-child(3) {
-  transform: rotate(45deg) translate(-5px, -5px);
+#profileImg:hover {
+  z-index: 99;
+  opacity: 1;
+  margin-top: 0;
+}
+.dropdown-menu::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  right: 88px;
+  height: 20px;
+  width: 20px;
+  background: var(--secondary-bg);
+  transform: rotate(45deg);
+  background-color: purple;
+}
+.dropdown-menu {
+  width: 230px;
+}
+.dropdown-menu {
+  right: 30px;
+  top: 2000px;
+}
+#a {
+  top: 70px;
+  background-color: purple;
+  left: -110px;
+}
+
+.chevron-dropdown::after {
+  content: "";
+  width: 1rem;
+  height: 1rem;
+  margin-left: 0.6rem;
+  margin-bottom: -0.25rem;
+  padding-top: 10px;
+  display: inline-block;
+  vertical-align: baseline;
+  transform: translateY(-1.5px);
+  background-image: url("./assets/down-chevron-black.png"); /* Check the path */
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: auto;
+}
+
+.chevron-dropdown-img {
+  content: "";
+  width: 1rem;
+  height: 1rem;
+  margin-bottom: -0.7rem;
+  margin-left: 0.7rem;
+  padding-top: 10px;
+  display: inline-block;
+  vertical-align: baseline;
+  transform: translateY(-1.5px);
+  background-image: url("./assets/down-chevron-black.png"); /* Check the path */
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: auto;
 }
