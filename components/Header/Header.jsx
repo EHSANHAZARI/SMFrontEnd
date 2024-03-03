@@ -44,6 +44,17 @@ const Navbar = () => {
   // splitting method to get the name of the path in array
   const splitLocation = pathname.split("/");
 
+  const [activeLink, setActiveLink] = useState("/");
+
+  const handleSetActiveLink = (link) => {
+    setActiveLink(link);
+  };
+  useEffect(() => {
+    // Apply the active class when the component mounts
+    const initialActiveLink = window.location.pathname;
+    setActiveLink(initialActiveLink);
+  }, []); // Empty dependency array means this effect runs only once after the component mounts
+
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
@@ -67,11 +78,22 @@ const Navbar = () => {
         </button>
         <div className="collapse navbar-collapse" id="navbarCollapse">
           <div className="navbar-nav ms-auto p-4 p-lg-0">
-            <Link to="/" className="nav-item nav-link active">
+            <Link
+              to="/"
+              className={`nav-item nav-link ${activeLink === "/" ? "active" : ""}`}
+              onClick={() => handleSetActiveLink("/")}
+              id="/"
+            >
               Home
             </Link>
             <div className="nav-item dropdown aboutus">
-              <Link to="/About-Us" className="nav-link " data-bs-toggle="">
+              <Link
+                to="/About-Us"
+                className={`nav-item nav-link ${activeLink === "/About-Us" ? "active" : ""}`}
+                data-bs-toggle=""
+                onClick={() => handleSetActiveLink("/About-Us")}
+                id="/About-Us"
+              >
                 <span>About Us</span>
                 <span className="chevron-dropdown"></span>
               </Link>
@@ -84,10 +106,20 @@ const Navbar = () => {
                 </Link>
               </div>
             </div>
-            <Link to="/Employers" className="nav-item nav-link">
+            <Link
+              to="/Employers"
+              className={`nav-item nav-link ${activeLink === "/Employers" ? "active" : ""}`}
+              onClick={() => handleSetActiveLink("/Employers")}
+              id="/Employers"
+            >
               Employers
             </Link>
-            <Link to="/Browse-Jobs" className="nav-item nav-link">
+            <Link
+              to="/Browse-Jobs"
+              className={`nav-item nav-link ${activeLink === "/Browse-Jobs" ? "active" : ""}`}
+              onClick={() => handleSetActiveLink("/Browse-Jobs")}
+              id="/Browse-Jobs"
+            >
               Browse Jobs
             </Link>
             {(() => {
@@ -127,10 +159,20 @@ const Navbar = () => {
                 <Link to="/Employer/Jobs/Post-Job" className="nav-item nav-link">Post Job</Link>
               )
             )} */}
-            <Link to="/Contact-Us" className="nav-item nav-link">
+            <Link
+              to="/Contact-Us"
+              className={`nav-item nav-link ${activeLink === "/Contact-Us" ? "active" : ""}`}
+              onClick={() => handleSetActiveLink("/Contact-Us")}
+              id="/Contact-Us"
+            >
               Contact Us
             </Link>
-            <Link to="/Resume-Upload" className="nav-item nav-link">
+            <Link
+              to="/Resume-Upload"
+              className={`nav-item nav-link ${activeLink === "/Resume-Upload" ? "active" : ""}`}
+              onClick={() => handleSetActiveLink("/Resume-Upload")}
+              id="/Resume-Upload"
+            >
               Resume Upload
             </Link>
           </div>
@@ -158,7 +200,10 @@ const Navbar = () => {
                       data-bs-toggle=""
                     >
                       <div>
-                        <span className="chevron-dropdown-img"></span>
+                        <span
+                          className="chevron-dropdown-img"
+                          id="chevron"
+                        ></span>
                         <img
                           src={auth?.user?.photo}
                           alt={auth?.user?.firstname}
