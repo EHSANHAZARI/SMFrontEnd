@@ -49,8 +49,9 @@ const Navbar = () => {
   const handleSetActiveLink = (link) => {
     setActiveLink(link);
   };
+
   useEffect(() => {
-    // Apply the active class when the component mounts
+    // Apply the active class when the component mounts , it stores the current path when the page mounts
     const initialActiveLink = window.location.pathname;
     setActiveLink(initialActiveLink);
   }, []); // Empty dependency array means this effect runs only once after the component mounts
@@ -82,7 +83,6 @@ const Navbar = () => {
               to="/"
               className={`nav-item nav-link ${activeLink === "/" ? "active" : ""}`}
               onClick={() => handleSetActiveLink("/")}
-              id="/"
             >
               Home
             </Link>
@@ -92,7 +92,6 @@ const Navbar = () => {
                 className={`nav-item nav-link ${activeLink === "/About-Us" ? "active" : ""}`}
                 data-bs-toggle=""
                 onClick={() => handleSetActiveLink("/About-Us")}
-                id="/About-Us"
               >
                 <span>About Us</span>
                 <span className="chevron-dropdown"></span>
@@ -110,7 +109,6 @@ const Navbar = () => {
               to="/Employers"
               className={`nav-item nav-link ${activeLink === "/Employers" ? "active" : ""}`}
               onClick={() => handleSetActiveLink("/Employers")}
-              id="/Employers"
             >
               Employers
             </Link>
@@ -118,7 +116,6 @@ const Navbar = () => {
               to="/Browse-Jobs"
               className={`nav-item nav-link ${activeLink === "/Browse-Jobs" ? "active" : ""}`}
               onClick={() => handleSetActiveLink("/Browse-Jobs")}
-              id="/Browse-Jobs"
             >
               Browse Jobs
             </Link>
@@ -163,7 +160,6 @@ const Navbar = () => {
               to="/Contact-Us"
               className={`nav-item nav-link ${activeLink === "/Contact-Us" ? "active" : ""}`}
               onClick={() => handleSetActiveLink("/Contact-Us")}
-              id="/Contact-Us"
             >
               Contact Us
             </Link>
@@ -171,7 +167,6 @@ const Navbar = () => {
               to="/Resume-Upload"
               className={`nav-item nav-link ${activeLink === "/Resume-Upload" ? "active" : ""}`}
               onClick={() => handleSetActiveLink("/Resume-Upload")}
-              id="/Resume-Upload"
             >
               Resume Upload
             </Link>
