@@ -81,7 +81,9 @@ const Navbar = () => {
           <div className="navbar-nav ms-auto p-4 p-lg-0">
             <Link
               to="/"
-              className={`nav-item nav-link ${activeLink === "/" ? "active" : ""}`}
+              className={`nav-item nav-link ${
+                activeLink === "/" ? "active" : ""
+              }`}
               onClick={() => handleSetActiveLink("/")}
             >
               Home
